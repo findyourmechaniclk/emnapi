@@ -1,3 +1,13 @@
+# Optimized by ci-cost (https://github.com/mariotavarez/ci-cost)
+# Applied 6 optimizations:
+# - [HIGH] Add npm dependency cache to "test" job
+# - [HIGH] Add npm dependency cache to "napi-versions" job
+# - [MEDIUM] Add concurrency group to "ci.yml"
+# - [MEDIUM] 3 jobs clone the repo — consider artifact sharing
+# - [LOW] Explicitly set fail-fast for large matrix job "test" (18 combinations)
+# - [LOW] Explicitly set fail-fast for large matrix job "package-tests" (6 combinations)
+# Estimated savings: ~15 min/run
+#
 name: CI
 
 on:
@@ -14,6 +24,10 @@ on:
     - '**/docs/**'
   workflow_dispatch:
 
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 permissions:
   id-token: write
   contents: write
